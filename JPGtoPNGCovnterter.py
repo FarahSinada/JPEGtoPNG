@@ -5,7 +5,7 @@ from PIL import Image
 # grab first and second arguments
 current_folder = sys.argv[1]
 new_folder = sys.argv[2]
-g = []
+
 # check if new/ exists, if not, create it
 # new change
 
