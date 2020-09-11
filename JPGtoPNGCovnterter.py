@@ -1,5 +1,5 @@
 import sys
-import os
+import os   #this is used for directory path manipulation
 from PIL import Image
 
 
@@ -26,11 +26,26 @@ check_folders(current_folder, new_folder)
 try:
     pass
 
-except:
+except PermissionError as err:
+    print('Cannot access folder as file')
+    print(err)
     pass
 
-with open(f'.{current_folder}',mode='r') as my_folder:
-    test = Image.open('.\Pikachu.jpg')
+path_cur = os.path.join('.\\', current_folder)
+path_new = os.path.join('.\\', new_folder)
+# print(path)
+
+with os.scandir(path_cur) as my_folder:
+    for entry in my_folder:
+        if entry.name.endswith(".jpg") and entry.is_file():
+            print(entry.name, entry.path)
+            # img = Image.open(entry)
+            # new_img = img.save(path_new,'.png')
+
+
+
+# with open(f'.\{current_folder}',mode='r') as my_folder:
+#     test = Image.open('.\Pikachu.jpg')
 
 # loop through pokedex folder
 # for images in current_folder:
