@@ -1,5 +1,5 @@
 import sys
-import os   #this is used for directory path manipulation
+import os   # this is used for directory path manipulation
 from PIL import Image
 
 
@@ -49,7 +49,8 @@ with os.scandir(path_cur) as my_folder:
 
             # convert to png, save to the new folder
             with os.scandir(path_new) as png_folder:
-                new_img = img.save(entry.name, 'PNG')
+                # entry.name includes the file ext, splitext splits pathname into a pair(root,ext)
+                new_img = img.save(f'.\\new\\{os.path.splitext(entry.name)[0]}.png')
 
 
 # with open(f'.\{current_folder}',mode='r') as my_folder:
