@@ -9,11 +9,12 @@ def check_folders(folder1, folder2):
         print('Folder where images are stored not found')
 
     if not os.path.isdir(f'.\{new_folder}'):
+        # \\ to ignore special character \
         os.mkdir('.\\new')
 
 
 # using sys grab first and second arguments
-# enter folder names like this: folder\ new\
+# enter folder names like this: folder new\
 current_folder = sys.argv[1]
 new_folder = sys.argv[2]
 
@@ -24,33 +25,38 @@ new_folder = sys.argv[2]
 check_folders(current_folder, new_folder)
 
 try:
-    pass
+    path_cur = os.path.join('.\\', current_folder)
+    path_new = os.path.join(os.getcwd(), new_folder)
+
+    # to access directory use scandir
+    with os.scandir(path_cur) as my_folder:
+        # loop through pokedex folder for images
+        # entry is object of type nt.DirEntry
+        for entry in my_folder:
+            # is_file() returns true only if path points to file not directory
+            if entry.name.endswith(".jpg") and entry.is_file():
+                print(entry.name, entry.path)
+                # print(type(entry))
+                # entry.path is of type str
+                img = Image.open(entry.path)
+
+                # print(path_new)
+
+                # convert to png, save to the new folder
+                with os.scandir(path_new) as png_folder:
+                    # entry.name includes the file ext, splitext splits pathname into a pair(root,ext)
+                    new_img = img.save(f'.\\new\\{os.path.splitext(entry.name)[0]}.png')
 
 except PermissionError as err:
     print('Cannot access folder as file')
     print(err)
+
+except FileNotFoundError as err2:
+    print('File cannot be found')
+    print(err2)
     pass
 
-path_cur = os.path.join('.\\', current_folder)
-path_new = os.path.join(os.getcwd(), new_folder)
-# print(path)
 
-with os.scandir(path_cur) as my_folder:
-    # loop through pokedex folder for images
-    for entry in my_folder:
-        if entry.name.endswith(".jpg") and entry.is_file():
-            print(entry.name, entry.path)
-            # entry is object of type nt.DirEntry
-            # print(type(entry))
-            # entry.path is of type str
-            img = Image.open(entry.path)
-
-            print(path_new)
-
-            # convert to png, save to the new folder
-            with os.scandir(path_new) as png_folder:
-                # entry.name includes the file ext, splitext splits pathname into a pair(root,ext)
-                new_img = img.save(f'.\\new\\{os.path.splitext(entry.name)[0]}.png')
 
 
 # with open(f'.\{current_folder}',mode='r') as my_folder:
